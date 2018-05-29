@@ -105,6 +105,12 @@ contract BitcoinStore is Ownable, SafeMath {
       return(i);
   }
 
+  /* fallback function for when ether is sent to the contract */
+  function () external payable {
+    uint buytokens = safeMul(bitcoin_ratio , msg.value)/eth_ratio;
+    ERC20(Bitcoin_address).transfer(msg.sender, buytokens);
+  }
+
   function buy() public payable {
     uint buytokens = safeMul(bitcoin_ratio , msg.value)/eth_ratio;
     ERC20(Bitcoin_address).transfer(msg.sender, buytokens);
