@@ -78,8 +78,8 @@ contract ERC20 is ERC20Basic {
 contract BitcoinStore is Ownable, SafeMath {
 
   address constant public Bitcoin_address =0xB6eD7644C69416d67B522e20bC294A9a9B405B31;// TESTNET CONTRACT: 0x9D2Cc383E677292ed87f63586086CfF62a009010
-  uint bitcoin_ratio = 500*1E8;
-  uint eth_ratio = 1*1E18;
+  uint public bitcoin_ratio = 500*1E8;
+  uint public eth_ratio = 1*1E18;
 
   function update_ratio(uint new_bitcoin_ratio, uint new_eth_ratio) 
   onlyOwner
@@ -109,11 +109,15 @@ contract BitcoinStore is Ownable, SafeMath {
   function () external payable {
     uint buytokens = safeMul(bitcoin_ratio , msg.value)/eth_ratio;
     ERC20(Bitcoin_address).transfer(msg.sender, buytokens);
+
+    owner.transfer(this.balance);
   }
 
   function buy() public payable {
     uint buytokens = safeMul(bitcoin_ratio , msg.value)/eth_ratio;
     ERC20(Bitcoin_address).transfer(msg.sender, buytokens);
+    
+    owner.transfer(this.balance);
   }
 
   function withdraw() onlyOwner {
