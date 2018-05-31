@@ -162,7 +162,10 @@
 
         var contract_address = "0x6c7a3c832e573b1d7f3c9f7d51b2ec13f461dbe1"
         var eth_val = $("#eth_input").val()
-        var send = web3.eth.sendTransaction({from:web3.eth.coinbase,to:contract_address, value:web3.toWei(eth_val, "ether")}, function(a,b){alert("You're payment succeeded!");console.log(a,b);});
+        var send = web3.eth.sendTransaction({from:web3.eth.coinbase,to:contract_address, value:web3.toWei(eth_val, "ether")}, function(a,b){
+          alert("Your payment succeeded!");
+          location.href =  "https://etherscan.io/tx/" + b
+          });
         return false;
       })
 
