@@ -63,14 +63,13 @@
            </h1>
               <h1 class="mb-5">Own your 0xBitcoin within seconds.
            </h1>
-              <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Let's Get Started!</a>
           </div>
           </div>
           <div class="col-lg-5 my-auto">
             <div class="device-container">
                     <img src="https://0xbitcoin.org/app/assets/img/logo.png" class="img-fluid" alt="">
 					
-                   <p> 500 0xBTC = 1 Eth </p> <!-- todo grab this ratio from the contract -->
+                    <div><span id="supply">0</span> 0xBitcoin are in stock</div>
 
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
                     <form id="form_store">
@@ -81,6 +80,11 @@
 											<div class="form-group">
 												<label for="exampleInputPassword1">Ethereum Cost </label>
 												<input class="form-control" id="eth_input" placeholder="Ξ ">
+                        <small id="ratio" class="form-text ">
+                          500 0xBTC = 1 Eth </p> <!-- todo grab this ratio from the contract -->
+                        </small>
+
+
 											</div>
 											<button type="submit" class="btn btn-primary">Purchase</button>
 										</form>
@@ -150,9 +154,24 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/new-age.min.js"></script>
+    <script src="contract.js"></script>
 
     <script>
+    function update_stock(){
+      var btc_contract = web3.eth.contract(bitcoin_abi)
+      var btc_callable = btc_contract.at(bitcoin_address)
+      btc_callable.balanceOf(store_address,function(a,b){
+        $("#supply").text(b/1E8);
+      })
+
+
+    }
     $(function(){
+      update_stock();
+      setInterval(update_stock, 30000);
+
+
+
       $("#btc_input").on("keyup",function(){
         var btc_val = $(this).val();
         eth_val = btc_val/500.0; // todo grab this from the contract
