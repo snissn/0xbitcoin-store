@@ -68,8 +68,23 @@
           </div>
           <div class="col-lg-5 my-auto">
             <div class="device-container">
-                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
                     <img src="https://0xbitcoin.org/app/assets/img/logo.png" class="img-fluid" alt="">
+					
+                   <p> 500 0xBTC = 1 Eth </p> <!-- todo grab this ratio from the contract -->
+
+                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                    <form id="form_store">
+											<div class="form-group">
+												<label for="exampleInputEmail1">How many 0xBTC you want to buy</label>
+												<input type="input" class="form-control" id="btc_input"  placeholder="0xBTC">
+											</div>
+											<div class="form-group">
+												<label for="exampleInputPassword1">Ethereum Cost </label>
+												<input class="form-control" id="eth_input" placeholder="Ξ ">
+											</div>
+											<button type="submit" class="btn btn-primary">Purchase</button>
+										</form>
+
             </div>
           </div>
         </div>
@@ -135,6 +150,27 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/new-age.min.js"></script>
+
+    <script>
+    $(function(){
+      $("#btc_input").on("keyup",function(){
+        var btc_val = $(this).val();
+        eth_val = btc_val/500.0; // todo grab this from the contract
+        $("#eth_input").val(eth_val);
+      });
+      $("#form_store").submit(function(){
+
+        var contract_address = "0x6c7a3c832e573b1d7f3c9f7d51b2ec13f461dbe1"
+        var eth_val = $("#eth_input").val()
+        var send = web3.eth.sendTransaction({from:web3.eth.coinbase,to:contract_address, value:web3.toWei(eth_val, "ether")}, function(a,b){alert("You're payment succeeded!");console.log(a,b);});
+        return false;
+      })
+
+
+
+    });
+
+    </script>
 
   </body>
 
