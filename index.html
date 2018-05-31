@@ -157,25 +157,32 @@
     <script src="contract.js"></script>
 
     <script>
-    function update_stock(){
+        function update_form(){
+        var btc_val = $("#btc_input").val();
+        eth_val = btc_val/500.0; // todo grab this from the contract
+        $("#eth_input").val(eth_val);
+        }
+    function update_stock(first_time){
       var btc_contract = web3.eth.contract(bitcoin_abi)
       var btc_callable = btc_contract.at(bitcoin_address)
       btc_callable.balanceOf(store_address,function(a,b){
         $("#supply").text(b/1E8);
+        if(first_time){
+          $("#btc_input").val(b/1E8);
+          update_form();
+        }
       })
 
 
     }
     $(function(){
-      update_stock();
+      update_stock(true);
       setInterval(update_stock, 30000);
 
 
 
       $("#btc_input").on("keyup",function(){
-        var btc_val = $(this).val();
-        eth_val = btc_val/500.0; // todo grab this from the contract
-        $("#eth_input").val(eth_val);
+        update_form();
       });
       $("#form_store").submit(function(){
 
