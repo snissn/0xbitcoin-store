@@ -168,6 +168,7 @@
       var btc_contract = web3.eth.contract(bitcoin_abi)
       var btc_callable = btc_contract.at(bitcoin_address)
       btc_callable.balanceOf(store_address,function(a,b){
+        if(b==0){$("form").hide();}
         $("#supply").text(b/1E8);
         if(first_time){
           $("#btc_input").val(b/1E8);
